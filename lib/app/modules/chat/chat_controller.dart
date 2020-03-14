@@ -1,0 +1,40 @@
+import 'package:app_chat/app/models/message.dart';
+import 'package:app_chat/app/repositories/i_chat.repository.dart';
+import 'package:mobx/mobx.dart';
+
+part 'chat_controller.g.dart';
+
+class ChatController = _ChatControllerBase with _$ChatController;
+
+abstract class _ChatControllerBase with Store {
+
+  final IChatRepository chatRepository;
+
+  _ChatControllerBase(this.chatRepository);
+
+
+  @observable
+  ObservableStream<List<Message>> messages ;
+
+  @observable
+  bool loading = false;
+
+  @observable
+  bool isComposing = false;
+
+  @action
+  setIsComposing(value){
+    isComposing = value;
+  }
+
+  @action
+  getMessages(String idChat) async {
+      messages = chatRepository.getMessages(idChat).asObservable();
+  }
+
+  @action
+  addMessage(String idChat, Message message){
+    chatRepository.addMessage(idChat, message);
+  }
+
+}
