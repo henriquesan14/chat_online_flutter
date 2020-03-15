@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_chat/app/models/message.dart';
 import 'package:app_chat/app/repositories/i_chat.repository.dart';
 import 'package:mobx/mobx.dart';
@@ -17,10 +19,10 @@ abstract class _ChatControllerBase with Store {
   ObservableStream<List<Message>> messages ;
 
   @observable
-  bool loading = false;
+  bool isComposing = false;
 
   @observable
-  bool isComposing = false;
+  bool loading = false;
 
   @action
   setIsComposing(value){
@@ -35,6 +37,20 @@ abstract class _ChatControllerBase with Store {
   @action
   addMessage(String idChat, Message message){
     chatRepository.addMessage(idChat, message);
+  }
+
+  @action
+  Future<String> uploadImage(String idChat, File image) async {
+    loading = true;
+    try{
+      String url = await chatRepository.uploadImage(idChat, image);
+      return url;
+    }catch(err){
+      print(err);
+      return null;
+    }finally{
+      loading = false;
+    }
   }
 
 }

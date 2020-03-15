@@ -77,7 +77,11 @@ class _ChatPageState extends ModularState<ChatPage, ChatController> with AfterIn
                 ),
               ),
             ),
-            
+            Observer(
+              builder: (_){
+                return controller.loading ? LinearProgressIndicator() : Container();
+              },
+            ),
             TextComposer(
               widget.codigoChat,
               widget.user

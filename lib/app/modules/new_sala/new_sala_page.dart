@@ -39,6 +39,7 @@ class _NewSalaPageState extends ModularState<NewSalaPage, NewSalaController> {
                   onChanged: (value) {
                     user = value;
                   },
+                  autofocus: true,
                   validator: (value) {
                     if (value.isEmpty) {
                       return "Informe seu nickname";
@@ -57,6 +58,7 @@ class _NewSalaPageState extends ModularState<NewSalaPage, NewSalaController> {
                         EdgeInsets.symmetric(vertical: 18, horizontal: 10),
                     hintText: "Nickname",
                   ),
+                  textCapitalization: TextCapitalization.sentences,
                   keyboardType: TextInputType.text,
                   enabled: !controller.loading,
                   textInputAction: TextInputAction.next,
@@ -99,7 +101,7 @@ class _NewSalaPageState extends ModularState<NewSalaPage, NewSalaController> {
                           EdgeInsets.symmetric(vertical: 18, horizontal: 10),
                       hintText: "Código da sala",
                     ),
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.visiblePassword,
                     enabled: !controller.loading),
               ),
               SizedBox(

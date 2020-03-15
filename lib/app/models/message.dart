@@ -4,6 +4,7 @@ class Message {
   String idUser;
   String user;
   String message;
+  String urlImage;
   Timestamp timestamp;
 
   Message({this.user, this.message, this.timestamp});
@@ -12,6 +13,7 @@ class Message {
     idUser = json['idUser'];
     user = json['user'];
     message = json['message'];
+    urlImage = json['urlImage'];
     timestamp = json['timestamp'];
   }
 
@@ -20,6 +22,7 @@ class Message {
     data['idUser'] = this.idUser;
     data['user'] = this.user;
     data['message'] = this.message;
+    data['urlImage'] = this.urlImage;
     data['timestamp'] = this.timestamp;
     return data;
   }

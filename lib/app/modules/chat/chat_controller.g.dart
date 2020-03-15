@@ -26,6 +26,23 @@ mixin _$ChatController on _ChatControllerBase, Store {
     }, _$messagesAtom, name: '${_$messagesAtom.name}_set');
   }
 
+  final _$isComposingAtom = Atom(name: '_ChatControllerBase.isComposing');
+
+  @override
+  bool get isComposing {
+    _$isComposingAtom.context.enforceReadPolicy(_$isComposingAtom);
+    _$isComposingAtom.reportObserved();
+    return super.isComposing;
+  }
+
+  @override
+  set isComposing(bool value) {
+    _$isComposingAtom.context.conditionallyRunInAction(() {
+      super.isComposing = value;
+      _$isComposingAtom.reportChanged();
+    }, _$isComposingAtom, name: '${_$isComposingAtom.name}_set');
+  }
+
   final _$loadingAtom = Atom(name: '_ChatControllerBase.loading');
 
   @override
@@ -46,14 +63,44 @@ mixin _$ChatController on _ChatControllerBase, Store {
   final _$getMessagesAsyncAction = AsyncAction('getMessages');
 
   @override
-  Future<dynamic> getMessages(String idChat) {
+  Future getMessages(String idChat) {
     return _$getMessagesAsyncAction.run(() => super.getMessages(idChat));
+  }
+
+  final _$uploadImageAsyncAction = AsyncAction('uploadImage');
+
+  @override
+  Future<String> uploadImage(String idChat, File image) {
+    return _$uploadImageAsyncAction.run(() => super.uploadImage(idChat, image));
+  }
+
+  final _$_ChatControllerBaseActionController =
+      ActionController(name: '_ChatControllerBase');
+
+  @override
+  dynamic setIsComposing(dynamic value) {
+    final _$actionInfo = _$_ChatControllerBaseActionController.startAction();
+    try {
+      return super.setIsComposing(value);
+    } finally {
+      _$_ChatControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  dynamic addMessage(String idChat, Message message) {
+    final _$actionInfo = _$_ChatControllerBaseActionController.startAction();
+    try {
+      return super.addMessage(idChat, message);
+    } finally {
+      _$_ChatControllerBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override
   String toString() {
     final string =
-        'messages: ${messages.toString()},loading: ${loading.toString()}';
+        'messages: ${messages.toString()},isComposing: ${isComposing.toString()},loading: ${loading.toString()}';
     return '{$string}';
   }
 }
