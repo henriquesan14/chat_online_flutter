@@ -24,55 +24,59 @@ class _TextComposerState extends ModularState<TextComposer, ChatController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Row(
+        child: Stack(
       children: <Widget>[
-        Expanded(
-            child: TextFormField(
-                style: TextStyle(color: Colors.white),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                controller: _msgController,
-                textInputAction: TextInputAction.newline,
-                textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
-                  prefixIcon: IconButton(
-                    icon: Icon(Icons.photo_camera, color: Colors.white, size: 25,),
-                    onPressed: () async {
-                      File image = await ImagePicker.pickImage(source: ImageSource.camera);
-                      if(image != null){
-                        String url = await controller.uploadImage(widget.codigoChat, image);
-                        _sendMessageWithImage(url);
-                        _sendMessage();
-                      }
-                    },
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.send,
-                    color: _isComposing ? Colors.white : null),
-                    onPressed: _isComposing
-                        ? () {
-                            _sendMessage();
-                          }
-                        : null,
-                  ),
-                  filled: true,
-                  border: InputBorder.none,
-                  hintText: "Escreva algo...",
+        Row(
+          children: <Widget>[
+            Expanded(
+                child: TextFormField(
+              style: TextStyle(color: Colors.white),
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              controller: _msgController,
+              textInputAction: TextInputAction.newline,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.send,
+                      color: _isComposing ? Colors.white : null),
+                  onPressed: _isComposing
+                      ? () {
+                          _sendMessage();
+                        }
+                      : null,
                 ),
-                onChanged: (text) {
-                  setState(() {
-                     _isComposing = text.length > 0;
-                  });
-                },
-              )
+                filled: true,
+                border: InputBorder.none,
+                hintText: "Escreva algo...",
+              ),
+              onChanged: (text) {
+                setState(() {
+                  _isComposing = text.length > 0;
+                });
+              },
+            )),
+          ],
         ),
+        IconButton(
+          onPressed: () async {
+            File image = await ImagePicker.pickImage(source: ImageSource.camera);
+            if(image != null){
+              String url = await controller.uploadImage(widget.codigoChat, image);
+              _sendMessageWithImage(url);
+            }
+          },
+          icon: Icon(Icons.photo_camera),
+        )
       ],
     ));
   }
 
   _sendMessage() async {
     String id = await DeviceUtils().getId(context);
-    if(_msgController.text.isNotEmpty){
+    if (_msgController.text.isNotEmpty) {
       Message msg = Message();
       msg.user = widget.user;
       msg.message = _msgController.text;
@@ -91,7 +95,4 @@ class _TextComposerState extends ModularState<TextComposer, ChatController> {
     msg.idUser = id;
     controller.addMessage(widget.codigoChat, msg);
   }
-
 }
-
-
